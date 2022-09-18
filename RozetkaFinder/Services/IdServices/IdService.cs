@@ -5,11 +5,11 @@ namespace RozetkaFinder.Services.IdServices
 {
     public interface IIdService
     {
-        public byte[] ConfigIdHash();
+        Task<byte[]> ConfigIdHashAsync();
     }
     public class IdService : IIdService
     {
-        public byte[] ConfigIdHash()
+        public async Task<byte[]> ConfigIdHashAsync()
         {
             byte[] hashId;
             string time = Convert.ToString(DateTime.Now);

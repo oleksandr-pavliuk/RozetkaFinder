@@ -4,12 +4,12 @@ namespace RozetkaFinder.Services.Security.RefreshToken
 {
     public interface IRefreshTokenService
     {
-        Task<RefreshToken> GenerateRefreshToken();
+        Task<RefreshToken> GenerateRefreshTokenAsync();
     }
 
     public class RefreshTokenService : IRefreshTokenService
     {
-        public async Task<RefreshToken> GenerateRefreshToken()
+        public async Task<RefreshToken> GenerateRefreshTokenAsync()
         {
             var refreshToken = new RefreshToken()
             {

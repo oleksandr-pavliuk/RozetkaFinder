@@ -5,12 +5,12 @@ namespace RozetkaFinder.Services.PasswordServices
 {
     public interface IPasswordService
     {
-        Task<(byte[], byte[])> CreatePasswordHash(string password);
-        Task<bool> AuthenticationPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
+        Task<(byte[], byte[])> CreatePasswordHashAsync(string password);
+        Task<bool> AuthenticationPasswordHashAsync(string password, byte[] passwordHash, byte[] passwordSalt);
     }
     public class PasswordService : IPasswordService
     {
-        public async Task<(byte[], byte[])> CreatePasswordHash(string password)
+        public async Task<(byte[], byte[])> CreatePasswordHashAsync(string password)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -20,7 +20,7 @@ namespace RozetkaFinder.Services.PasswordServices
             }
         }
 
-        public async Task<bool> AuthenticationPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public async Task<bool> AuthenticationPasswordHashAsync(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {

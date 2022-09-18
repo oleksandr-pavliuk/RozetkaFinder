@@ -19,13 +19,19 @@ namespace RozetkaFinder.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<TokenDTO>> RegisterAsync(UserRegisterDTO request) => await _userService.Create(request);
+        public async Task<TokenDTO> RegisterAsync(UserRegisterDTO request) => await _userService.Create(request);
 
-        [HttpPost("all")]
+        [HttpGet("all")]
         [Authorize(Roles="admin")]
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _userService.GetAll();
+        }
+
+        [HttpPost]
+        public async Task<TokenDTO> LoginAsync(UserInDTO request)
+        {
+            return await _userService.Login(request);
         }
     }
 }
