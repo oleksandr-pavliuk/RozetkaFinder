@@ -61,3 +61,8 @@ D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.Enti
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\obj\Debug\net6.0\RozetkaFinder.MvcApplicationPartsAssemblyInfo.cs
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\AutoMapper.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Scrutor.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
