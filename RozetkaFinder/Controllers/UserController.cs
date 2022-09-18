@@ -22,7 +22,7 @@ namespace RozetkaFinder.Controllers
         public async Task<ActionResult<TokenDTO>> RegisterAsync(UserRegisterDTO request) => await _userService.Create(request);
 
         [HttpPost("all")]
-        [Authorize]
+        [Authorize(Roles="admin")]
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _userService.GetAll();
