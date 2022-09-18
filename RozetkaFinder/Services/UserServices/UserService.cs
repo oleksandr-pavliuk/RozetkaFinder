@@ -13,6 +13,7 @@ namespace RozetkaFinder.Services.UserServices
     {
         Task<TokenDTO> Create(UserRegisterDTO user);
         Task<TokenDTO> Update(UserInDTO user);
+        Task<IEnumerable<User>> GetAll();
     }
     public class UserService : IUserService
     {
@@ -20,10 +21,10 @@ namespace RozetkaFinder.Services.UserServices
         private readonly IUserRepository _repository;
         private readonly IJwtService _jwtConfiguration;
         private readonly IRefreshTokenService _refreshTokenConfiguration;
-        private readonly IConfigurationId _configurationId;
+        private readonly IIdService _configurationId;
         private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
-        public UserService(IConfiguration config,IMapper mapper, IUserRepository repository, IJwtConfiguration jwtConfiguration, IRefreshTokenConfiguration refreshTokenConfiguration, IConfigurationId configurationId, IPasswordService passwordService)
+        public UserService(IConfiguration config,IMapper mapper, IUserRepository repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdService configurationId, IPasswordService passwordService)
         {
             _mapper = mapper;
             _configuration = config;
@@ -79,8 +80,10 @@ namespace RozetkaFinder.Services.UserServices
                     Refresh = refreshToken
                 });
             }
-                
-
+        }
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            return await _repository.GetAll();
         }
     }
 }

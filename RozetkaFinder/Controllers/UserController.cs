@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using RozetkaFinder.DTOs;
+using RozetkaFinder.Models.User;
 using RozetkaFinder.Services.UserServices;
 
 namespace RozetkaFinder.Controllers
@@ -18,8 +21,12 @@ namespace RozetkaFinder.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<TokenDTO>> RegisterAsync(UserRegisterDTO request) => await _userService.Create(request);
 
-
-
-
+        [HttpPost("all")]
+        [Authorize]
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _userService.GetAll();
+        }
     }
 }
+
