@@ -9,14 +9,14 @@ namespace RozetkaFinder.Models.Exceptions
     [Serializable]
     public class UserNotFoundException : Exception
     {
-        public string UserLogin { get; set; }
+        public string UserEmail{ get; set; }
         public UserNotFoundException() { }
         public UserNotFoundException(string message) : base(message) { }
 
         public UserNotFoundException(string message, Exception inner) : base(message, inner) { }
-        public UserNotFoundException(string message, string userLogin) : this(message)
+        public UserNotFoundException(string message, string userEmail) : this(message)
         {
-            UserLogin = userLogin;
+            UserEmail = userEmail;
         }
     }
 }
