@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.VisualBasic;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Models.User;
 using RozetkaFinder.Repository;
@@ -17,7 +16,6 @@ namespace RozetkaFinder.Services.UserServices
         Task<TokenDTO> Update(UserInDTO request);
         Task<TokenDTO> Login(UserInDTO request);
         Task<IEnumerable<User>> GetAll();
-
     }
     public class UserService : IUserService
     {
@@ -42,9 +40,10 @@ namespace RozetkaFinder.Services.UserServices
         }
         public async Task<TokenDTO> Create(UserRegisterDTO request)
         {
-            User user = _mapper.Map<User>(request);
-            if (!await _validationService.EmailValidationAsync(request.Email))
+            if (!await _validationService.ModelValidationAsync(request))
                 return null;
+
+            User user = _mapper.Map<User>(request);
 
             byte[] passwordHash, passwordSalt;
             RefreshToken refToken;
