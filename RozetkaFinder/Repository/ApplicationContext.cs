@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RozetkaFinder.Models;
+using RozetkaFinder.Models.GoodObjects;
 using RozetkaFinder.Models.User;
 
 namespace RozetkaFinder.Repository
@@ -7,7 +7,7 @@ namespace RozetkaFinder.Repository
     public class ApplicationContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Good> Goods { get; set; }
+        public DbSet<GoodItem> Goods { get; set; }
         public ApplicationContext()
         {
             Database.EnsureCreated();
