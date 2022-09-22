@@ -38,7 +38,7 @@ namespace RozetkaFinder.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles="admin, customer")]
+        [Authorize]
         public async Task<List<GoodDTO>> GetGoods(string name)
         {
             var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault();

@@ -1,8 +1,6 @@
-﻿using AutoMapper.Configuration.Conventions;
-
-namespace RozetkaFinder.Models
+﻿namespace RozetkaFinder.Models.GoodObjects
 {
-    public class Good
+    public class GoodItem
     {
         public int Id { get; set; }
         public string Title { get; set; }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RozetkaFinder.Models.User;
+using RozetkaFinder.Models.GoodObjects;
 using RozetkaFinder.DTOs;
 
 namespace RozetkaFinder.Models.Mapping
@@ -10,7 +11,8 @@ namespace RozetkaFinder.Models.Mapping
         {
             CreateMap<User.User, UserRegisterDTO>().ReverseMap();
             CreateMap<User.User, UserInDTO>().ReverseMap();
-            CreateMap<Good, GoodDTO>().ReverseMap();
+            CreateMap<GoodItem, GoodDTO>().ReverseMap();
+            CreateMap<Good, GoodItem>().ReverseMap();
         }
     }
 }
