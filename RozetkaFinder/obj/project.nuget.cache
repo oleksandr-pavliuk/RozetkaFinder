@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "pDC2z8Y2L+31wT0j+DJ7gqwfpZ0ykeEhu3bJDoC/49A82QIFeJJ7BAtk1It85M3oVfPJWuHwOJ7isxvaFvjKFg==",
+  "dgSpecHash": "DT59FiIuJgxsqQBFve0feEG/n9+XIx+6rhsb866A3ouDwnez6iaBVGueAFTUMPasPYEoZym4fmDh+uLZbmWK+w==",
   "success": true,
   "projectFilePath": "D:\\Coding\\Project\\C#\\RozetkaFinder\\RozetkaFinder\\RozetkaFinder.csproj",
   "expectedPackageFiles": [
@@ -39,6 +39,7 @@
     "C:\\Users\\User\\.nuget\\packages\\microsoft.openapi\\1.3.1\\microsoft.openapi.1.3.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\scrutor\\3.3.0\\scrutor.3.3.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.filters\\7.0.5\\swashbuckle.aspnetcore.filters.7.0.5.nupkg.sha512",

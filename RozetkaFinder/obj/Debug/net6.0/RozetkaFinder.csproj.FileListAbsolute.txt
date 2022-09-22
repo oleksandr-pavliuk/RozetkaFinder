@@ -66,3 +66,4 @@ D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.Exte
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Scrutor.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Newtonsoft.Json.dll
