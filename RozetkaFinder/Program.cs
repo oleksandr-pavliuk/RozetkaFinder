@@ -14,6 +14,10 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using RozetkaFinder.Services.ValidationServices;
+using RozetkaFinder.Models;
+using RozetkaFinder.Models.User;
+using RozetkaFinder.Services.GoodsServices;
+using RozetkaFinder.Services.JSONServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,8 +56,11 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IIdService, IdService>();
 builder.Services.AddScoped<INotificationService, TelegramNotificationService>();
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<Good>, GoodRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IGoodsService, GoodsService>();
+builder.Services.AddScoped<IJsonService, JsonService>();
 builder.Services.AddScoped<IValidationService, ValidationService>();
 
 var app = builder.Build();

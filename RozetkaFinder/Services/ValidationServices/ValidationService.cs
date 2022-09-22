@@ -2,6 +2,7 @@
 using RozetkaFinder.Repository;
 using System.ComponentModel.DataAnnotations;
 using RozetkaFinder.Models.Exceptions.ValidationException;
+using RozetkaFinder.Models.User;
 
 namespace RozetkaFinder.Services.ValidationServices
 {
@@ -12,8 +13,8 @@ namespace RozetkaFinder.Services.ValidationServices
     }
     public class ValidationService : IValidationService
     {
-        private readonly IUserRepository _repository; 
-        public ValidationService(IUserRepository repository)
+        private readonly IRepository<User> _repository; 
+        public ValidationService(IRepository<User> repository)
         {
             _repository = repository;
         }
@@ -98,7 +99,7 @@ namespace RozetkaFinder.Services.ValidationServices
         private async Task<bool> TelegramValidation(string telegram)
         {
             if (!telegram.ToLower().StartsWith('@'))
-                throw new TelegramFormatException("Telegram is not valid . . ", request.Telegram);
+                throw new TelegramFormatException("Telegram is not valid . . ", telegram);
             return true;
         }
     }

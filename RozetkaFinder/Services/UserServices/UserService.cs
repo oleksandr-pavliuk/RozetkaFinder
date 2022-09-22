@@ -20,14 +20,14 @@ namespace RozetkaFinder.Services.UserServices
     public class UserService : IUserService
     {
         private readonly IConfiguration _configuration;
-        private readonly IUserRepository _repository;
+        private readonly IRepository<User> _repository;
         private readonly IJwtService _jwtService;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IIdService _configurationId;
         private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
         private readonly IValidationService _validationService;
-        public UserService(IConfiguration config,IMapper mapper, IUserRepository repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdService configurationId, IPasswordService passwordService, IValidationService validationService)
+        public UserService(IConfiguration config,IMapper mapper, IRepository<User> repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdService configurationId, IPasswordService passwordService, IValidationService validationService)
         {
             _mapper = mapper;
             _configuration = config;

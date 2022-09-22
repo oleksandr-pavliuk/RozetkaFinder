@@ -3,17 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RozetkaFinder.Repository
 {
-    public interface IUserRepository
-    {
-        Task<IEnumerable<User>> GetAllAsync();
-        void CreateAsync(User user);
-        Task<User> ReadAsync(string email);
-        Task<bool> UpdateAsync(User user);
-        void DeleteAsync(User user);
-
-
-    }
-    public class UserRepository : IUserRepository                                      // CRUD operations
+    public class UserRepository : IRepository<User>                                      // CRUD operations
     {
         private readonly ApplicationContext _context;
 
