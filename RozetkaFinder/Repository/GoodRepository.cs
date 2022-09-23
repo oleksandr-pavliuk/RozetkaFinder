@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RozetkaFinder.Models.GoodObjects;
+using RozetkaFinder.Models.User;
 
 namespace RozetkaFinder.Repository
 {
@@ -12,21 +13,32 @@ namespace RozetkaFinder.Repository
         }
         public async Task<IEnumerable<GoodItem>> GetAllAsync() => 
             await _context.Goods.ToListAsync();
-        public async void CreateAsync(GoodItem good)
+        public async Task<bool> CreateAsync(GoodItem good)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(good);
+            await _context.SaveChangesAsync();
+            return true;
         }
         public async Task<GoodItem> ReadAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _context.Goods.Where(u => Convert.ToString(u.IdGood) == id).FirstOrDefaultAsync();
         }
         public async Task<bool> UpdateAsync(GoodItem good)
         {
-            throw new NotImplementedException();
+            GoodItem goodItem = await _context.Goods.FirstOrDefaultAsync(u => u.IdGood == good.IdGood);
+            if (goodItem == null)
+                return false;
+            else
+                _context.Entry(goodItem).CurrentValues.SetValues(good);
+
+            await _context.SaveChangesAsync();
+            return true;
         }
-        public async void DeleteAsync(GoodItem good)
+        public async Task<bool> DeleteAsync(GoodItem good)
         {
-            throw new NotImplementedException();
+            _context.Goods.Remove(good);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

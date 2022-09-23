@@ -1,4 +1,6 @@
-﻿public class Rootobject
+﻿using Newtonsoft.Json;
+
+public class Rootobject
 {
     public Data data { get; set; }
 }
@@ -10,6 +12,7 @@ public class Data
     public Quantities quantities { get; set; }
     public Pagination pagination { get; set; }
     public Option[] options { get; set; }
+    [JsonIgnore]
     public object[] chosen { get; set; }
     public object[] related_options { get; set; }
     public Meta meta { get; set; }

@@ -13,11 +13,9 @@ namespace RozetkaFinder.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IGoodsService _goodsService;
-        public UserController(IUserService userService, IGoodsService goodsService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _goodsService = goodsService;
         }
 
         [HttpPost("register")]
@@ -41,9 +39,15 @@ namespace RozetkaFinder.Controllers
         [Authorize]
         public async Task<List<GoodDTO>> GetGoods(string name)
         {
-            var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault();
-            Console.Write(user.Value);
-            return await _goodsService.GetGoodsByRequestAsync(name);
+            return await _userService.SearchGoods(name);
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<bool> SubscribeGood(string id)
+        {
+            var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault().Value;
+            return await _userService.SubscribeGood(id, user);
         }
             
 

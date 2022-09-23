@@ -13,6 +13,8 @@ namespace RozetkaFinder.Models.Mapping
             CreateMap<User.User, UserInDTO>().ReverseMap();
             CreateMap<GoodItem, GoodDTO>().ReverseMap();
             CreateMap<Good, GoodItem>().ReverseMap();
+            CreateMap<Good, GoodDTO>().ReverseMap();
+
         }
     }
 }

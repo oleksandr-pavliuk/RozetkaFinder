@@ -15,10 +15,11 @@ namespace RozetkaFinder.Repository
         public async Task<IEnumerable<User>> GetAllAsync() => await _context.Users.ToListAsync();
 
         //<------------ NEW USER ----------->
-        public async void CreateAsync(User user) 
+        public async Task<bool> CreateAsync(User user) 
         {
             await _context.Users.AddAsync(user);
             _context.SaveChanges();
+            return true;
         }
 
 
@@ -26,7 +27,6 @@ namespace RozetkaFinder.Repository
         public async Task<User> ReadAsync(string email)    
         {
             User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
-            
             return user;
         }
 
@@ -45,11 +45,11 @@ namespace RozetkaFinder.Repository
         }
 
         //<------------------ DELETE USER ---------------->
-        public async void DeleteAsync(User user)   //delete user
+        public async Task<bool> DeleteAsync(User user)   //delete user
         {
             _context.Users.Remove(user);
            await _context.SaveChangesAsync();
-
+            return true;
         }
 
     }
