@@ -4,6 +4,7 @@ using RozetkaFinder.Models.User;
 using RozetkaFinder.Repository;
 using RozetkaFinder.Services.GoodsServices;
 using RozetkaFinder.Services.IdServices;
+using RozetkaFinder.Services.JSONServices;
 using RozetkaFinder.Services.PasswordServices;
 using RozetkaFinder.Services.Security.JwtToken;
 using RozetkaFinder.Services.Security.RefreshToken;
@@ -31,8 +32,10 @@ namespace RozetkaFinder.Services.UserServices
         private readonly IMapper _mapper;
         private readonly IValidationService _validationService;
         private readonly IGoodsService _goodsService;
-        public UserService(IGoodsService goodsService, IConfiguration config,IMapper mapper, IRepository<User> repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdService configurationId, IPasswordService passwordService, IValidationService validationService)
+        private readonly IJsonService _jsonService;
+        public UserService( IJsonService jsonService, IGoodsService goodsService, IConfiguration config,IMapper mapper, IRepository<User> repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdService configurationId, IPasswordService passwordService, IValidationService validationService)
         {
+            _jsonService = jsonService;
             _goodsService = goodsService;
             _mapper = mapper;
             _configuration = config;
@@ -65,11 +68,11 @@ namespace RozetkaFinder.Services.UserServices
             user.TokenCreated = refToken.Created;
             user.Notification = "telegram";
 
-            _repository.CreateAsync(user);
+            await _repository.CreateAsync(user);
 
             return(new TokenDTO()
             {
-                JwtToken = await _jwtService.GenerateJwtTokenAsync(user, _configuration.GetSection("AppSettings:Token").Value),
+                JwtToken = await _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
                 Refresh = refToken
             });
 
@@ -91,7 +94,7 @@ namespace RozetkaFinder.Services.UserServices
                 await _repository.UpdateAsync(user);
                 return new TokenDTO()
                 {
-                    JwtToken = await _jwtService.GenerateJwtTokenAsync(user, _configuration.GetSection("AppSettings:Token").Value),
+                    JwtToken = await _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
                     Refresh = refToken
                 };
             }
@@ -116,7 +119,7 @@ namespace RozetkaFinder.Services.UserServices
 
                 return (new TokenDTO()
                 {
-                    JwtToken = await _jwtService.GenerateJwtTokenAsync(user, _configuration.GetSection("AppSettings:Token").Value),
+                    JwtToken = await _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
                     Refresh = refreshToken
                 });
             }

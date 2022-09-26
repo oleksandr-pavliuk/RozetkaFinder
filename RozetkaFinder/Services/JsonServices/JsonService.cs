@@ -2,10 +2,12 @@
 using System.Net;
 using RozetkaFinder.Models.GoodObjects;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Http;
 using RozetkaFinder.DTOs;
+using RozetkaFinder.Models;
+using System.IO;
+using System.Reflection.Metadata.Ecma335;
+using Org.BouncyCastle.Asn1.Mozilla;
+using System.Runtime.InteropServices;
 
 namespace RozetkaFinder.Services.JSONServices
 {
@@ -13,6 +15,8 @@ namespace RozetkaFinder.Services.JSONServices
     {
         Task<List<GoodDTO>> GetGoodsAsync(string name);
         Task<GoodItem> GetGoodIDAsync(string id);
+        Task<JwtSalt> GetJwtSaltAsync();
+        Task<EmailModel> GetEmailModelAsync();
     }
     public class JsonService : IJsonService
     {
@@ -63,5 +67,26 @@ namespace RozetkaFinder.Services.JSONServices
                 return good;
             }
         }
+
+        public async Task<JwtSalt> GetJwtSaltAsync()
+        {
+            JwtSalt jwtSalt;
+            using (StreamReader sr = new StreamReader("./JwtSalt.json"))
+            {
+                jwtSalt = JsonConvert.DeserializeObject<JwtSalt>(await sr.ReadToEndAsync());
+            }
+            return jwtSalt;
+        }
+
+        public async Task<EmailModel> GetEmailModelAsync()
+        {
+            EmailModel emailModel;
+            using (StreamReader sr = new StreamReader("./EmailModel.json"))
+            {
+                emailModel = JsonConvert.DeserializeObject<EmailModel>(await sr.ReadToEndAsync());
+            }
+            return emailModel;
+        }
+        
     }
 }

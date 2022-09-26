@@ -12,9 +12,10 @@ namespace RozetkaFinder.Services.GoodsServices
     {
         Task<List<GoodDTO>> GetGoodsByRequestAsync(string name);
         Task<bool> GetGoodIDAsync(string id, string user);
+        Task<bool> CheckGoodPrice(GoodItem good);
 
     }
-    public class GoodsService: IGoodsService
+    public class GoodsService : IGoodsService
     {
         private readonly IJsonService _jsonService;
         private readonly IMapper _mapper;
@@ -43,7 +44,14 @@ namespace RozetkaFinder.Services.GoodsServices
             {
                 throw ex;
             }
+        }
 
+        public async Task<bool> CheckGoodPrice(GoodItem good)
+        {
+            var goodNew = await _jsonService.GetGoodIDAsync(Convert.ToString(good.IdGood));
+            if (goodNew.Price < good.Price)
+                return true;
+            return false;
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     public interface INotificationService
     {
-        string Name { get; }
-        void Send();
+        void Send(string to, string from, string password, string link);
     }
 }

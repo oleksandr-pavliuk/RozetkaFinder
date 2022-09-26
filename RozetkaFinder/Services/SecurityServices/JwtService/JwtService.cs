@@ -3,17 +3,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using RozetkaFinder.Models.User;
+using RozetkaFinder.Models;
 
 namespace RozetkaFinder.Services.Security.JwtToken
 {
     public interface IJwtService
     {
-        Task<string> GenerateJwtTokenAsync(User user, string tokenSalt);
+        Task<string> GenerateJwtTokenAsync(User user, JwtSalt tokenSalt);
     }
 
     public class JwtService : IJwtService
     {
-        public async Task<string> GenerateJwtTokenAsync(User user, string tokenSalt)
+        public async Task<string> GenerateJwtTokenAsync(User user, JwtSalt tokenSalt)
         {
             List<Claim> claims = new List<Claim>()
             {
@@ -23,7 +24,7 @@ namespace RozetkaFinder.Services.Security.JwtToken
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                tokenSalt));
+                tokenSalt.Key));
 
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

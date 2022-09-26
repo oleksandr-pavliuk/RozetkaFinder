@@ -41,7 +41,7 @@ namespace RozetkaFinder.Controllers
         {
             return await _userService.SearchGoods(name);
         }
-        
+          
         [HttpPost]
         [Authorize]
         public async Task<bool> SubscribeGood(string id)
@@ -49,8 +49,6 @@ namespace RozetkaFinder.Controllers
             var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault().Value;
             return await _userService.SubscribeGood(id, user);
         }
-            
-
     }
 }
 
