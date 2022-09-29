@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RozetkaFinder.Helpers.NotificationCreateHelper;
 using RozetkaFinder.Models;
 using RozetkaFinder.Models.GoodObjects;
 using RozetkaFinder.Models.User;
@@ -6,14 +7,15 @@ using RozetkaFinder.Repository;
 using RozetkaFinder.Services.GoodsServices;
 using RozetkaFinder.Services.JSONServices;
 using RozetkaFinder.Services.Notification;
+using RozetkaFinder.Services.UserServices;
 
 namespace RozetkaFinder.Services.MonitoringService
 {
-    public class MonitoringService : BackgroundService
+    public class MonitoringBackgroundService : BackgroundService
     {
-        private readonly ILogger<MonitoringService> _logger;
+        private readonly ILogger<MonitoringBackgroundService> _logger;
         private readonly IServiceProvider _provider;
-        public MonitoringService(ILogger<MonitoringService> logger, IServiceProvider provider)
+        public MonitoringBackgroundService(ILogger<MonitoringBackgroundService> logger, IServiceProvider provider)
         {
             _provider = provider;
             _logger = logger;
@@ -38,29 +40,21 @@ namespace RozetkaFinder.Services.MonitoringService
             using (var scope = _provider.CreateScope())
             {
                 var _goodService = scope.ServiceProvider.GetRequiredService<IGoodsService>();
-                var _goodRepositary = scope.ServiceProvider.GetRequiredService<IRepository<GoodItem>>();
-                var _userRepositary = scope.ServiceProvider.GetRequiredService<IRepository<User>>();
+                var _userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                 var _notification = scope.ServiceProvider.GetRequiredService<INotificationService>();
                 var _jsonService = scope.ServiceProvider.GetRequiredService<IJsonService>();
-                var goods = await _goodRepositary.GetAllAsync();
+                var goods = await _goodService.GetAllGoods();
 
                 foreach (var item in goods)
                 {
                     if (await _goodService.CheckGoodPrice(item))
                     {
                         _logger.LogInformation("Good is found . . .{id}", item.IdGood);
-                        var user = await _userRepositary.ReadAsync(item.UserId);
-                        if (user.Notification == "email")
-                        {
-                            _notification = new EmailNotificationService();
-                        }
-                        else
-                        {
-                            _notification = new TelegramNotificationService();
-                        }
+                        var user = _userService.GetUser(item.UserId);
+                        _notification = new NotifaicationCreator().CreateNotificationService((int)user.Notification);
                         EmailModel emailModel = await _jsonService.GetEmailModelAsync();
                         _notification.Send(item.UserId, emailModel.Email, emailModel.AppPassword, item.Href);
-                        await _goodRepositary.DeleteAsync(item);
+                        _goodService.DeleteGoodAsync(item);
 
                     }
                 }

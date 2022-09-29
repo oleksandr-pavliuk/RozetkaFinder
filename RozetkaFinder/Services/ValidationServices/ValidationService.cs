@@ -8,7 +8,7 @@ namespace RozetkaFinder.Services.ValidationServices
 {
     public interface IValidationService
     {
-        Task<bool> ModelValidationAsync(UserRegisterDTO request);
+        void ModelValidation(UserRegisterDTO request);
 
     }
     public class ValidationService : IValidationService
@@ -18,40 +18,29 @@ namespace RozetkaFinder.Services.ValidationServices
         {
             _repository = repository;
         }
-        public async Task<bool> ModelValidationAsync(UserRegisterDTO request)
+        public void ModelValidation(UserRegisterDTO request)
         {
-            bool result = true;
-            if (await EmailValidationAsync(request.Email))
-                result = true;
-            
+            EmailValidation(request.Email);
 
-            if(await PasswordValidationAsync(request.Password))
-                result = true;
-            
+            PasswordValidation(request.Password);
 
-            if (await TelegramValidation(request.Telegram))
-                result = true;
-
-            return result;
+            TelegramValidation(request.Telegram);
         }
+
          // =============== EMAIL VALIDATION ================
-        private async Task<bool> EmailValidationAsync(string email)
+        private void EmailValidation(string email)
         {
-            if(await _repository.ReadAsync(email) != null)
+            if(_repository.ReadAsync(u => u.Email == email) != null)
             {
                 throw new EmailExistingException("User already exist . . .", email);
             }
 
-            if (!string.IsNullOrEmpty(email) && new EmailAddressAttribute().IsValid(email))
-                return true;
-            else
-            {
+            if (string.IsNullOrEmpty(email) || !(new EmailAddressAttribute().IsValid(email)))
                 throw new EmailFormatException("Email is not valid . . . ", email);
-            }
         }
 
         //=================== PASSWORD VALIDATION ======================
-        private async Task<bool> PasswordValidationAsync(string password)
+        private void PasswordValidation(string password)
         {
             if(password.Length < 8)
             {
@@ -91,16 +80,14 @@ namespace RozetkaFinder.Services.ValidationServices
                 char[] special = { '@', '#', '$', '%', '^', '&', '+', '=' }; // or whatever    
                 if (password.IndexOfAny(special) == -1) throw new PasswordFormatException("Password is not valid . . . Must have the SPECIFIC sign (@ , # , $, ^ , & , + , =) . . .", password);
             }
-            return true;
 
         }
 
         //========================= TELEGRAM VALIDATION =========================
-        private async Task<bool> TelegramValidation(string telegram)
+        private void TelegramValidation(string telegram)
         {
             if (!telegram.ToLower().StartsWith('@'))
                 throw new TelegramFormatException("Telegram is not valid . . ", telegram);
-            return true;
         }
     }
 }

@@ -9,12 +9,12 @@ namespace RozetkaFinder.Services.Security.JwtToken
 {
     public interface IJwtService
     {
-        Task<string> GenerateJwtTokenAsync(User user, JwtSalt tokenSalt);
+        string GenerateJwtTokenAsync(User user, JwtSalt tokenSalt);
     }
 
     public class JwtService : IJwtService
     {
-        public async Task<string> GenerateJwtTokenAsync(User user, JwtSalt tokenSalt)
+        public string GenerateJwtTokenAsync(User user, JwtSalt tokenSalt)
         {
             List<Claim> claims = new List<Claim>()
             {

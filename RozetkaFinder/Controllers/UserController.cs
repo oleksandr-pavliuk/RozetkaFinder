@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Org.BouncyCastle.Asn1.Mozilla;
+using Org.BouncyCastle.Crypto;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Models.User;
 using RozetkaFinder.Services.GoodsServices;
@@ -46,8 +48,14 @@ namespace RozetkaFinder.Controllers
         [Authorize]
         public async Task<bool> SubscribeGood(string id)
         {
-            var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault().Value;
+            var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value;
             return await _userService.SubscribeGood(id, user);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<string> ChangePassword(string oldPasswod, string newPassword)
+        {
+            return await _userService.ChangePassword(HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value, oldPasswod, newPassword);
         }
     }
 }

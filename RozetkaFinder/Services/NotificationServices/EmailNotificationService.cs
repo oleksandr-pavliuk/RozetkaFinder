@@ -8,7 +8,7 @@ namespace RozetkaFinder.Services.Notification
 {
     public class EmailNotificationService : INotificationService
     {
-        public void Send(string emailTo, string emailFrom, string password, string link)
+        public async void Send(string emailTo, string emailFrom, string password, string link)
         {
             MimeMessage message = new MimeMessage();
             message.From.Add(new MailboxAddress("Rozetka Notification", emailFrom));
@@ -24,9 +24,9 @@ namespace RozetkaFinder.Services.Notification
             SmtpClient client = new SmtpClient();
             try
             {
-                client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate(emailFrom, password);
-                client.Send(message);
+                await client.ConnectAsync("smtp.gmail.com", 465, true);
+                await client.AuthenticateAsync(emailFrom, password);
+                await client.SendAsync(message);
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace RozetkaFinder.Services.Notification
             }
             finally
             {
-                client.Disconnect(true);
+                await client.DisconnectAsync(true);
                 client.Dispose();
             }
         }

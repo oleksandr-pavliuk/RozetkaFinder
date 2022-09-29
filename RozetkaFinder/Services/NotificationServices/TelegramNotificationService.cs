@@ -2,10 +2,9 @@
 {
     public class TelegramNotificationService : INotificationService
     {
-        public string Name { get; } = "telegram";
-        public void Send()
+        public void Send(string telegramTo, string telegramFrom, string password, string link)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace RozetkaFinder.Services.IdServices
+namespace RozetkaFinder.Helpers
 {
-    public interface IIdService
+    public interface IIdHelper
     {
         Task<byte[]> ConfigIdHashAsync();
     }
-    public class IdService : IIdService
+    public class IdHelper : IIdHelper
     {
         public async Task<byte[]> ConfigIdHashAsync()
         {

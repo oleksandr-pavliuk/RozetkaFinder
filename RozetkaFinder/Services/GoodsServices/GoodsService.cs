@@ -14,6 +14,8 @@ namespace RozetkaFinder.Services.GoodsServices
         Task<bool> GetGoodIDAsync(string id, string user);
         Task<bool> CheckGoodPrice(GoodItem good);
 
+        void DeleteGoodAsync(GoodItem good);
+        Task<IEnumerable<GoodItem>> GetAllGoods();
     }
     public class GoodsService : IGoodsService
     {
@@ -42,7 +44,7 @@ namespace RozetkaFinder.Services.GoodsServices
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
 
@@ -52,6 +54,15 @@ namespace RozetkaFinder.Services.GoodsServices
             if (goodNew.Price < good.Price)
                 return true;
             return false;
+        }
+
+        public async void DeleteGoodAsync(GoodItem good)
+        {
+            await _repository.DeleteAsync(good);
+        }
+        public async Task<IEnumerable<GoodItem>> GetAllGoods()
+        {
+            return await _repository.GetAllAsync();
         }
     }
 }

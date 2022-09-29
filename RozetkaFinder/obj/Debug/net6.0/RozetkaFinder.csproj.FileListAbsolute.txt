@@ -67,3 +67,8 @@ D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Scrutor.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\MailKit.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\MimeKit.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\EmailModel.json
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\JwtSalt.json

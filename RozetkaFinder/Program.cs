@@ -1,35 +1,36 @@
-using Microsoft.AspNetCore.Hosting.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using RozetkaFinder.Helpers;
+using RozetkaFinder.Models.GoodObjects;
+using RozetkaFinder.Models.Mapping;
+using RozetkaFinder.Models.User;
+using RozetkaFinder.Repository;
+using RozetkaFinder.Services.GoodsServices;
+using RozetkaFinder.Services.JSONServices;
+using RozetkaFinder.Services.MonitoringService;
 using RozetkaFinder.Services.Notification;
 using RozetkaFinder.Services.PasswordServices;
 using RozetkaFinder.Services.Security.JwtToken;
 using RozetkaFinder.Services.Security.RefreshToken;
-using RozetkaFinder.Repository;
-using AutoMapper;
-using RozetkaFinder.Models.Mapping;
-using RozetkaFinder.Services.IdServices;
 using RozetkaFinder.Services.UserServices;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using RozetkaFinder.Services.ValidationServices;
-using RozetkaFinder.Models.User;
-using RozetkaFinder.Services.GoodsServices;
-using RozetkaFinder.Services.JSONServices;
-using RozetkaFinder.Models.GoodObjects;
+using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddHostedService<MonitoringBackgroundService>();
 builder.Services.AddDbContext<ApplicationContext>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSwaggerGen( options => {
+builder.Services.AddSwaggerGen(options =>
+{
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Description = "Standart Authorization header using the Bearer Scheme ",
@@ -53,11 +54,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
-builder.Services.AddScoped<IIdService, IdService>();
+builder.Services.AddScoped<IIdHelper, IdHelper>();
 builder.Services.AddScoped<INotificationService, TelegramNotificationService>();
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
-builder.Services.AddScoped<IRepository<User>, UserRepository>();
-builder.Services.AddScoped<IRepository<GoodItem>, GoodRepository>();
+builder.Services.AddScoped<IRepository<User>, Repository<User>>();
+builder.Services.AddScoped<IRepository<GoodItem>, Repository<GoodItem>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGoodsService, GoodsService>();
 builder.Services.AddScoped<IJsonService, JsonService>();
