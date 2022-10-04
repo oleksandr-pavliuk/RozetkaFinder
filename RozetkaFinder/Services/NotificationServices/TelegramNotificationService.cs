@@ -2,7 +2,7 @@
 {
     public class TelegramNotificationService : INotificationService
     {
-        public void Send(string telegramTo, string telegramFrom, string password, string link)
+        public void Send(string telegramTo, string link)
         {
             
         }

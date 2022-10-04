@@ -1,4 +1,6 @@
+using AutoMapper.Execution;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -17,9 +19,13 @@ using RozetkaFinder.Services.Security.RefreshToken;
 using RozetkaFinder.Services.UserServices;
 using RozetkaFinder.Services.ValidationServices;
 using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 using System.Text;
+using Telegram.Bots;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//var not = Activator.CreateInstance(typeof(INotificationService).Namespace, "EmailNotificationService");
 
 // Add services to the container.
 builder.Services.AddHostedService<MonitoringBackgroundService>();
@@ -51,6 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -58,7 +65,7 @@ builder.Services.AddScoped<IIdHelper, IdHelper>();
 builder.Services.AddScoped<INotificationService, TelegramNotificationService>();
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
-builder.Services.AddScoped<IRepository<GoodItem>, Repository<GoodItem>>();
+builder.Services.AddScoped<IRepository<Subscribtion>, Repository<Subscribtion>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGoodsService, GoodsService>();
 builder.Services.AddScoped<IJsonService, JsonService>();

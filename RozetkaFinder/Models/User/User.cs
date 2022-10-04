@@ -11,6 +11,7 @@
         public string Email { get; set; }
         public string Telegram { get; set; }
         public Notification Notification { get; set; }
+        public long TelegramChatId { get; set; }
 
         // -------------- Security -----------------
         public byte[] PasswordHash { get; set; }

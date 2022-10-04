@@ -12,17 +12,17 @@ namespace RozetkaFinder.Services.GoodsServices
     {
         Task<List<GoodDTO>> GetGoodsByRequestAsync(string name);
         Task<bool> GetGoodIDAsync(string id, string user);
-        Task<bool> CheckGoodPrice(GoodItem good);
+        Task<bool> CheckGoodPrice(Subscribtion good);
 
-        void DeleteGoodAsync(GoodItem good);
-        Task<IEnumerable<GoodItem>> GetAllGoods();
+        void DeleteGoodAsync(Subscribtion good);
+        Task<IEnumerable<Subscribtion>> GetAllGoods();
     }
     public class GoodsService : IGoodsService
     {
         private readonly IJsonService _jsonService;
         private readonly IMapper _mapper;
-        private readonly IRepository<GoodItem> _repository; 
-        public GoodsService(IJsonService jsonService, IMapper mapper, IRepository<GoodItem> repository)
+        private readonly IRepository<Subscribtion> _repository; 
+        public GoodsService(IJsonService jsonService, IMapper mapper, IRepository<Subscribtion> repository)
         {
             _repository = repository;
             _jsonService = jsonService;
@@ -48,7 +48,7 @@ namespace RozetkaFinder.Services.GoodsServices
             }
         }
 
-        public async Task<bool> CheckGoodPrice(GoodItem good)
+        public async Task<bool> CheckGoodPrice(Subscribtion good)
         {
             var goodNew = await _jsonService.GetGoodIDAsync(Convert.ToString(good.IdGood));
             if (goodNew.Price < good.Price)
@@ -56,11 +56,11 @@ namespace RozetkaFinder.Services.GoodsServices
             return false;
         }
 
-        public async void DeleteGoodAsync(GoodItem good)
+        public async void DeleteGoodAsync(Subscribtion good)
         {
             await _repository.DeleteAsync(good);
         }
-        public async Task<IEnumerable<GoodItem>> GetAllGoods()
+        public async Task<IEnumerable<Subscribtion>> GetAllGoods()
         {
             return await _repository.GetAllAsync();
         }

@@ -2,7 +2,7 @@
 
 namespace RozetkaFinder.Models.GoodObjects
 {
-    public class GoodItem
+    public class Subscribtion
     {
         public int Id { get; set; }
         public int IdGood { get; set; }

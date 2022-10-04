@@ -4,17 +4,13 @@ using RozetkaFinder.Models.GoodObjects;
 using AutoMapper;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Models;
-using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using Org.BouncyCastle.Asn1.Mozilla;
-using System.Runtime.InteropServices;
 
 namespace RozetkaFinder.Services.JSONServices
 {
     public interface IJsonService
     {
         Task<List<GoodDTO>> GetGoodsAsync(string name);
-        Task<GoodItem> GetGoodIDAsync(string id);
+        Task<Subscribtion> GetGoodIDAsync(string id);
         Task<JwtSalt> GetJwtSaltAsync();
         Task<EmailModel> GetEmailModelAsync();
     }
@@ -37,7 +33,12 @@ namespace RozetkaFinder.Services.JSONServices
                 Rootobject obj = JsonConvert.DeserializeObject<Rootobject>(json);
 
                 Good[] goods = obj.data.goods;
+                
                 List<GoodDTO> goodItems = new List<GoodDTO>();
+
+                if (goods == null)
+                    throw new Exception("Goods was not found . . .");
+
                 foreach(var item in goods)
                 {
                     goodItems.Add(_mapper.Map<GoodDTO>(item));
@@ -46,7 +47,7 @@ namespace RozetkaFinder.Services.JSONServices
             }
         }
 
-        public async Task<GoodItem> GetGoodIDAsync(string id)
+        public async Task<Subscribtion> GetGoodIDAsync(string id)
         {
             using (WebClient wc = new WebClient())
             {
@@ -57,7 +58,7 @@ namespace RozetkaFinder.Services.JSONServices
                 string json = wc.DownloadString(uri);
                 Rootobject obj = JsonConvert.DeserializeObject<Rootobject>(json);
 
-                GoodItem good = new GoodItem() 
+                Subscribtion good = new Subscribtion() 
                 {
                     IdGood = obj.data.goods[0].id,
                     Price = Convert.ToInt32(obj.data.goods[0].price),

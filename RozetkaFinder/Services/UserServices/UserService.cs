@@ -18,6 +18,7 @@ namespace RozetkaFinder.Services.UserServices
     {
         Task<TokenDTO> Create(UserRegisterDTO request);
         Task<TokenDTO> Update(UserInDTO request);
+        void Update(User user);
         Task<TokenDTO> Login(UserInDTO request);
         Task<IEnumerable<User>> GetAll();
         Task<List<GoodDTO>> SearchGoods(string name);
@@ -80,15 +81,15 @@ namespace RozetkaFinder.Services.UserServices
 
         }
 
-        //------------------------------------------------------------  LOGIN
+        // ------------------------------------------------------------  LOGIN
         public async Task<TokenDTO> Login(UserInDTO request)
         {
             User user = this.FindByEmail(request.Email);
             if (user == null)
-                throw new UserNotFoundException();
+                throw new UserNotFoundException("User not found . . .");
 
             if (!await _passwordService.AuthenticationPasswordHashAsync(request.Password, user.PasswordHash, user.PasswordSalt))
-                throw new UserNotFoundException();
+                throw new UserNotFoundException("Password or email isn't correct . . . ");
             
             RefreshToken refToken = _refreshTokenService.GenerateRefreshTokenAsync();
             user.RefreshToken = refToken.Token;
@@ -125,6 +126,11 @@ namespace RozetkaFinder.Services.UserServices
                     Refresh = refreshToken
                 });
             }
+        }
+
+        public async void Update(User user)
+        {
+            await _repository.UpdateAsync(user, u => u.Email == user.Email);
         }
         // --------------------------------------------------------- FIND USER
 

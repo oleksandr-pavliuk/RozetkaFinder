@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RozetkaFinder.Helpers.NotificationCreateHelper;
+﻿using RozetkaFinder.Helpers.NotificationCreateHelper;
 using RozetkaFinder.Models;
-using RozetkaFinder.Models.GoodObjects;
-using RozetkaFinder.Models.User;
-using RozetkaFinder.Repository;
 using RozetkaFinder.Services.GoodsServices;
 using RozetkaFinder.Services.JSONServices;
 using RozetkaFinder.Services.Notification;
@@ -50,8 +46,11 @@ namespace RozetkaFinder.Services.MonitoringService
                     if (await _goodService.CheckGoodPrice(item))
                     {
                         _logger.LogInformation("Good is found . . .{id}", item.IdGood);
+
                         var user = _userService.GetUser(item.UserId);
-                        _notification = new NotifaicationCreator().CreateNotificationService((int)user.Notification);
+
+                        _notification = new NotifaicationCreator().CreateNotificationService(user.Notification.ToString());
+
                         EmailModel emailModel = await _jsonService.GetEmailModelAsync();
                         _notification.Send(item.UserId, emailModel.Email, emailModel.AppPassword, item.Href);
                         _goodService.DeleteGoodAsync(item);
