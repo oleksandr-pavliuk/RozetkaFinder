@@ -5,11 +5,11 @@ namespace RozetkaFinder.Helpers
 {
     public interface IIdHelper
     {
-        Task<byte[]> ConfigIdHashAsync();
+        byte[] ConfigIdHashAsync();
     }
     public class IdHelper : IIdHelper
     {
-        public async Task<byte[]> ConfigIdHashAsync()
+        public byte[] ConfigIdHashAsync()
         {
             byte[] hashId;
             string time = Convert.ToString(DateTime.Now);

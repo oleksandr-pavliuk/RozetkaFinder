@@ -37,24 +37,41 @@ namespace RozetkaFinder.Services.MonitoringService
             {
                 var _goodService = scope.ServiceProvider.GetRequiredService<IGoodsService>();
                 var _userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-                var _notification = scope.ServiceProvider.GetRequiredService<INotificationService>();
                 var _jsonService = scope.ServiceProvider.GetRequiredService<IJsonService>();
-                var goods = await _goodService.GetAllGoods();
+                var _notCreator = scope.ServiceProvider.GetRequiredService<INotificationCreator>();
+                var goods = await _goodService.GetAllGoodsAsync();
+                var markdowns = await _goodService.GetAllMarkdownsAsync();
 
                 foreach (var item in goods)
                 {
-                    if (await _goodService.CheckGoodPrice(item))
+                    if (await _goodService.CheckGoodPriceAsync(item))
                     {
                         _logger.LogInformation("Good is found . . .{id}", item.IdGood);
 
-                        var user = _userService.GetUser(item.UserId);
+                        var user = _userService.GetUser(item.UserEmail);
 
-                        _notification = new NotifaicationCreator().CreateNotificationService(user.Notification.ToString());
+                        INotificationService _notification = _notCreator.CreateNotificationService(user.Notification.ToString());
 
-                        EmailModel emailModel = await _jsonService.GetEmailModelAsync();
-                        _notification.Send(item.UserId, emailModel.Email, emailModel.AppPassword, item.Href);
+
+                        _notification.Send(item.UserEmail, item.Href);
                         _goodService.DeleteGoodAsync(item);
 
+                    }
+                }
+
+                foreach(var item in markdowns)
+                {
+                    if(await _goodService.CheckMarkdownCountAsync(item))
+                    {
+                        _logger.LogInformation("Good is found . . .{id}", item.Naming);
+
+                        var user = _userService.GetUser(item.UserEmail);
+
+                        INotificationService _notification = _notCreator.CreateNotificationService(user.Notification.ToString());
+
+
+                        _notification.Send(item.UserEmail, item.Href);
+                        _goodService.DeleteMarkdownAsync(item);
                     }
                 }
 

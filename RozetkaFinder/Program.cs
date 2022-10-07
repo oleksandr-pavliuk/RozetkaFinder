@@ -5,17 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RozetkaFinder.Helpers;
+using RozetkaFinder.Helpers.NotificationCreateHelper;
 using RozetkaFinder.Models.GoodObjects;
 using RozetkaFinder.Models.Mapping;
 using RozetkaFinder.Models.User;
 using RozetkaFinder.Repository;
 using RozetkaFinder.Services.GoodsServices;
 using RozetkaFinder.Services.JSONServices;
+using RozetkaFinder.Services.MarkdownServices;
 using RozetkaFinder.Services.MonitoringService;
 using RozetkaFinder.Services.Notification;
 using RozetkaFinder.Services.PasswordServices;
 using RozetkaFinder.Services.Security.JwtToken;
 using RozetkaFinder.Services.Security.RefreshToken;
+using RozetkaFinder.Services.TelegramServices;
 using RozetkaFinder.Services.UserServices;
 using RozetkaFinder.Services.ValidationServices;
 using Swashbuckle.AspNetCore.Filters;
@@ -28,7 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 //var not = Activator.CreateInstance(typeof(INotificationService).Namespace, "EmailNotificationService");
 
 // Add services to the container.
-builder.Services.AddHostedService<MonitoringBackgroundService>();
+
 builder.Services.AddDbContext<ApplicationContext>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(AppMappingProfile));
@@ -57,28 +60,40 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+builder.Services.AddScoped<INotificationCreator, NotificationCreator>();
+
+builder.Services.AddSingleton<ITelegramService, TelegramService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IIdHelper, IdHelper>();
-builder.Services.AddScoped<INotificationService, TelegramNotificationService>();
-builder.Services.AddScoped<INotificationService, EmailNotificationService>();
+
+builder.Services.AddScoped<TelegramNotificationService>();
+builder.Services.AddScoped<EmailNotificationService>();
+
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
-builder.Services.AddScoped<IRepository<Subscribtion>, Repository<Subscribtion>>();
+builder.Services.AddScoped<IRepository<SubscribtionGood>, Repository<SubscribtionGood>>();
+builder.Services.AddScoped<IRepository<SubscriptionMarkdown>, Repository<SubscriptionMarkdown>>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGoodsService, GoodsService>();
+builder.Services.AddScoped<IMarkdownService, MarkdownService>();
+
 builder.Services.AddScoped<IJsonService, JsonService>();
 builder.Services.AddScoped<IValidationService, ValidationService>();
+builder.Services.AddHostedService<MonitoringBackgroundService>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

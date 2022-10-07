@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "BTfmmTpGNH05nBRKcbMSC5TLfFYqdP5oJIymZ78+4Mnfq1N03EtKwJN+gBgVYA8p95pwXs7tNbURySfmR+dhgw==",
+  "success": true,
+  "projectFilePath": "D:\\Coding\\Project\\C#\\RozetkaFinder\\TelegramBotNotification\\TelegramBotNotification.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\telegram.bot\\18.0.0\\telegram.bot.18.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

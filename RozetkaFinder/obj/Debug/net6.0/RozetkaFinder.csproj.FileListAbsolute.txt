@@ -72,3 +72,13 @@ D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\MimeKit.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\EmailModel.json
 D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\JwtSalt.json
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Microsoft.Extensions.Http.Polly.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Polly.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Polly.Extensions.Http.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Telegram.Bot.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Telegram.Bots.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\Telegram.Bots.Extensions.AspNetCore.dll
+D:\Coding\Project\C#\RozetkaFinder\RozetkaFinder\bin\Debug\net6.0\TelegramToken.json

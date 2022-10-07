@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Org.BouncyCastle.Crypto;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Models;
 using RozetkaFinder.Models.GoodObjects;
@@ -11,35 +14,35 @@ namespace RozetkaFinder.Services.GoodsServices
     public interface IGoodsService
     {
         Task<List<GoodDTO>> GetGoodsByRequestAsync(string name);
-        Task<bool> GetGoodIDAsync(string id, string user);
-        Task<bool> CheckGoodPrice(Subscribtion good);
+        Task<bool> SubscribeGoodAsync(string id, string user);
+        Task<bool> CheckGoodPriceAsync(SubscribtionGood good);
 
-        void DeleteGoodAsync(Subscribtion good);
-        Task<IEnumerable<Subscribtion>> GetAllGoods();
+        void DeleteGoodAsync(SubscribtionGood good);
+        Task<IEnumerable<SubscribtionGood>> GetAllGoodsAsync();
     }
     public class GoodsService : IGoodsService
     {
         private readonly IJsonService _jsonService;
-        private readonly IMapper _mapper;
-        private readonly IRepository<Subscribtion> _repository; 
-        public GoodsService(IJsonService jsonService, IMapper mapper, IRepository<Subscribtion> repository)
+        private readonly IRepository<SubscribtionGood> _repositoryGoods;
+        private readonly IRepository<SubscriptionMarkdown> _repositoryMarkdowns;
+        public GoodsService(IJsonService jsonService, IMapper mapper, IRepository<SubscribtionGood> repositoryGoods, IRepository<SubscriptionMarkdown> repositoryMarkdowns)
         {
-            _repository = repository;
+            _repositoryGoods = repositoryGoods;
+            _repositoryMarkdowns = repositoryMarkdowns;
             _jsonService = jsonService;
-            _mapper = mapper;
         }
         public async Task<List<GoodDTO>> GetGoodsByRequestAsync(string name)
         {
             return await _jsonService.GetGoodsAsync(name);
         }
-        public async Task<bool> GetGoodIDAsync(string id, string user)
+        public async Task<bool> SubscribeGoodAsync(string id, string email)
         {
 
             var good = await _jsonService.GetGoodIDAsync(id);
-            good.UserId = user;
+            good.UserEmail = email;
             try
             {
-                await _repository.CreateAsync(good);
+                await _repositoryGoods.CreateAsync(good);
                 return true;
             }
             catch (Exception ex)
@@ -47,8 +50,7 @@ namespace RozetkaFinder.Services.GoodsServices
                 return false;
             }
         }
-
-        public async Task<bool> CheckGoodPrice(Subscribtion good)
+        public async Task<bool> CheckGoodPriceAsync(SubscribtionGood good)
         {
             var goodNew = await _jsonService.GetGoodIDAsync(Convert.ToString(good.IdGood));
             if (goodNew.Price < good.Price)
@@ -56,13 +58,17 @@ namespace RozetkaFinder.Services.GoodsServices
             return false;
         }
 
-        public async void DeleteGoodAsync(Subscribtion good)
+        public async void DeleteGoodAsync(SubscribtionGood good)
         {
-            await _repository.DeleteAsync(good);
+            await _repositoryGoods.DeleteAsync(good);
         }
-        public async Task<IEnumerable<Subscribtion>> GetAllGoods()
+        public async Task<IEnumerable<SubscribtionGood>> GetAllGoodsAsync()
         {
-            return await _repository.GetAllAsync();
+            return await _repositoryGoods.GetAllAsync();
         }
+
+
+
+        
     }
 }

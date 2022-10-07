@@ -3,6 +3,7 @@ using RozetkaFinder.Repository;
 using System.ComponentModel.DataAnnotations;
 using RozetkaFinder.Models.Exceptions.ValidationException;
 using RozetkaFinder.Models.User;
+using RozetkaFinder.Helpers.Constants;
 
 namespace RozetkaFinder.Services.ValidationServices
 {
@@ -32,11 +33,11 @@ namespace RozetkaFinder.Services.ValidationServices
         {
             if(_repository.ReadAsync(u => u.Email == email) != null)
             {
-                throw new EmailExistingException("User already exist . . .", email);
+                throw new EmailExistingException(Constants.userExistingMessage, email);
             }
 
             if (string.IsNullOrEmpty(email) || !(new EmailAddressAttribute().IsValid(email)))
-                throw new EmailFormatException("Email is not valid . . . ", email);
+                throw new EmailFormatException(Constants.emailExistingMessage, email);
         }
 
         //=================== PASSWORD VALIDATION ======================
@@ -44,7 +45,7 @@ namespace RozetkaFinder.Services.ValidationServices
         {
             if(password.Length < 8)
             {
-                throw new PasswordFormatException("Password is not valid . . . Must have 8 or more then 8 signs . . .", password);
+                throw new PasswordFormatException(Constants.passValidation8, password);
             }
 
             int validConditions = 0;
@@ -56,7 +57,7 @@ namespace RozetkaFinder.Services.ValidationServices
                     break;
                 }
             }
-            if (validConditions == 0) throw new PasswordFormatException("Password is not valid . . . Must have the LOWER case letter . . .", password);
+            if (validConditions == 0) throw new PasswordFormatException(Constants.passValidationLower, password);
             foreach (char c in password)
             {
                 if (c >= 'A' && c <= 'Z')
@@ -65,7 +66,7 @@ namespace RozetkaFinder.Services.ValidationServices
                     break;
                 }
             }
-            if (validConditions == 1) throw new PasswordFormatException("Password is not valid . . . Must have the UPPER case letter . . .", password);
+            if (validConditions == 1) throw new PasswordFormatException(Constants.passValidationUpper, password);
             foreach (char c in password)
             {
                 if (c >= '0' && c <= '9')
@@ -74,11 +75,11 @@ namespace RozetkaFinder.Services.ValidationServices
                     break;
                 }
             }
-            if (validConditions == 2) throw new PasswordFormatException("Password is not valid . . . Must have the number . . .", password);
+            if (validConditions == 2) throw new PasswordFormatException(Constants.passValidationNum, password);
             if (validConditions == 3)
             {
                 char[] special = { '@', '#', '$', '%', '^', '&', '+', '=' }; // or whatever    
-                if (password.IndexOfAny(special) == -1) throw new PasswordFormatException("Password is not valid . . . Must have the SPECIFIC sign (@ , # , $, ^ , & , + , =) . . .", password);
+                if (password.IndexOfAny(special) == -1) throw new PasswordFormatException(Constants.passValidationSpecific, password);
             }
 
         }
@@ -87,7 +88,7 @@ namespace RozetkaFinder.Services.ValidationServices
         private void TelegramValidation(string telegram)
         {
             if (!telegram.ToLower().StartsWith('@'))
-                throw new TelegramFormatException("Telegram is not valid . . ", telegram);
+                throw new TelegramFormatException(Constants.telegramValidation, telegram);
         }
     }
 }

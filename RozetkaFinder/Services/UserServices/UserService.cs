@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Org.BouncyCastle.Asn1.Mozilla;
+using RozetkaFinder.Helpers.Constants;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Helpers;
 using RozetkaFinder.Models.Exceptions;
@@ -21,9 +21,8 @@ namespace RozetkaFinder.Services.UserServices
         void Update(User user);
         Task<TokenDTO> Login(UserInDTO request);
         Task<IEnumerable<User>> GetAll();
-        Task<List<GoodDTO>> SearchGoods(string name);
-        Task<bool> SubscribeGood(string id, string user);
         Task<string> ChangePassword(string email, string oldPassword, string newPassword);
+        Task<string> ChangeNotificationSetting(string email);
         public User GetUser(string userEmail);
     }
     public class UserService : IUserService
@@ -64,7 +63,7 @@ namespace RozetkaFinder.Services.UserServices
             refToken = _refreshTokenService.GenerateRefreshTokenAsync();
             (passwordHash, passwordSalt) = await _passwordService.CreatePasswordHashAsync(request.Password);
 
-            user.IdHash = await _configurationId.ConfigIdHashAsync();
+            user.IdHash = _configurationId.ConfigIdHashAsync();
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.RefreshToken = refToken.Token;
@@ -86,10 +85,10 @@ namespace RozetkaFinder.Services.UserServices
         {
             User user = this.FindByEmail(request.Email);
             if (user == null)
-                throw new UserNotFoundException("User not found . . .");
+                throw new UserNotFoundException(Constants.userNotFoundMessage);
 
             if (!await _passwordService.AuthenticationPasswordHashAsync(request.Password, user.PasswordHash, user.PasswordSalt))
-                throw new UserNotFoundException("Password or email isn't correct . . . ");
+                throw new UserNotFoundException(Constants.passwordOrEmailInvalid);
             
             RefreshToken refToken = _refreshTokenService.GenerateRefreshTokenAsync();
             user.RefreshToken = refToken.Token;
@@ -111,7 +110,7 @@ namespace RozetkaFinder.Services.UserServices
             User user = _repository.ReadAsync(u => u.Email == request.Email);
 
             if (user == null)
-                throw new UserNotFoundException();
+                throw new UserNotFoundException(Constants.userNotFoundMessage);
             else
             {
                 RefreshToken refreshToken = _refreshTokenService.GenerateRefreshTokenAsync();
@@ -151,35 +150,31 @@ namespace RozetkaFinder.Services.UserServices
             return _repository.ReadAsync(u => u.Email == email);
         }
 
-
-        //--------------------------------------------------------- SEARCHING GOODS BY REQUEST 
-        public async Task<List<GoodDTO>> SearchGoods(string name)
-        {
-            return await _goodsService.GetGoodsByRequestAsync(name);
-        }
-
-        //--------------------------------------------------------  SUBSCRIBE THE PRODUCT
-
-        public async Task<bool> SubscribeGood(string id, string user)
-        {
-            return await _goodsService.GetGoodIDAsync(id, user);
-        }
         //-------------------------------------------------------- CHANGE PASSWORD
         public async Task<string> ChangePassword(string email, string oldPassword, string newPassword)
         {
             User user = _repository.ReadAsync(u => u.Email == email);
             if (oldPassword == newPassword)
-                throw new AuthenticationException("Make new password. You can't use the previous password . . .");
+                throw new AuthenticationException(Constants.authMakeNewPassword);
 
             if (await _passwordService.AuthenticationPasswordHashAsync(oldPassword, user.PasswordHash, user.PasswordSalt))
             {
                 (user.PasswordHash, user.PasswordSalt) = await _passwordService.CreatePasswordHashAsync(newPassword);
                 await _repository.UpdateAsync(user, u => u.Email == user.Email);
-                return "Password changed . . .";
+                return Constants.passwordChanged;
             }
             else
-                throw new AuthenticationException("Password is not correct. Try it again . . .");
+                throw new AuthenticationException(Constants.passwordIsNotCorrect);
 
+        }
+
+        //--------------------------------------------------------- CHANGE NOTIFICATION
+        public async Task<string> ChangeNotificationSetting(string email)
+        {
+            User user = _repository.ReadAsync(u => u.Email == email);
+            user.Notification = user.Notification == global::Notification.email ? global::Notification.telegram : global::Notification.email;
+            await _repository.UpdateAsync(user, u => u.Email == user.Email);
+            return Constants.notificationChanged;
         }
     }
 }

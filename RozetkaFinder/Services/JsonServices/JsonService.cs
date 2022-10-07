@@ -4,6 +4,8 @@ using RozetkaFinder.Models.GoodObjects;
 using AutoMapper;
 using RozetkaFinder.DTOs;
 using RozetkaFinder.Models;
+using System.Reflection.Metadata;
+using RozetkaFinder.Helpers.Constants;
 
 namespace RozetkaFinder.Services.JSONServices
 {
@@ -40,7 +42,7 @@ namespace RozetkaFinder.Services.JSONServices
                 List<GoodDTO> goodItems = new List<GoodDTO>();
 
                 if (goods == null)
-                    throw new Exception("Goods was not found . . .");
+                    throw new Exception(Constants.goodWasNotFound);
 
                 foreach(var item in goods)
                 {
@@ -88,7 +90,7 @@ namespace RozetkaFinder.Services.JSONServices
                 List<GoodDTO> goodItems = new List<GoodDTO>();
 
                 if (goods == null)
-                    throw new Exception("Goods was not found . . .");
+                    throw new Exception(Constants.markdownWasNotFound);
 
                 foreach (var item in goods)
                 {
@@ -113,7 +115,7 @@ namespace RozetkaFinder.Services.JSONServices
                 Good[] goods = obj.data.goods;
 
                 if (goods == null)
-                    throw new Exception("Goods was not found . . .");
+                    throw new Exception(Constants.markdownWasNotFound);
 
                 
                 return goods.Length;

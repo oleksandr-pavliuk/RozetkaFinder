@@ -7,7 +7,8 @@ namespace RozetkaFinder.Repository
     public class ApplicationContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Subscribtion> Subscriptions { get; set; }
+        public DbSet<SubscribtionGood> SubscriptionsGood { get; set; }
+        public DbSet<SubscriptionMarkdown> SubscriptionMarkdown { get; set; }
         public ApplicationContext()
         {
             Database.EnsureCreated();

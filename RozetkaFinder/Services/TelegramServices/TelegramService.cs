@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using RozetkaFinder.Helpers.Constants;
 using RozetkaFinder.Services.JSONServices;
 using RozetkaFinder.Services.UserServices;
 using Telegram.Bot;
@@ -73,16 +73,16 @@ namespace RozetkaFinder.Services.TelegramServices
 
                     case string s when s.Contains(updates[1]):
                         RozetkaFinder.Models.User.User user = _userService.GetUser(update.Message.Text);
-                        if (user == null) await bot.SendTextMessageAsync(update.Message.Chat.Id, "User not found, try again ");
+                        if (user == null) await bot.SendTextMessageAsync(update.Message.Chat.Id, Constants.gettingEmailBot);
                         else
                         {
                             user.TelegramChatId = update.Message.Chat.Id;
                             _userService.Update(user);
-                            await bot.SendTextMessageAsync(update.Message.Chat.Id, "Thank you for using our service :) \n Now you will get your notification from this bot (if your notification setting set on the TELEGRAM)");
+                            await bot.SendTextMessageAsync(update.Message.Chat.Id, Constants.mainTextBot);
                         }
                         break;
                     default: 
-                        await bot.SendTextMessageAsync(update.Message.Chat.Id, "It not command . . .");
+                        await bot.SendTextMessageAsync(update.Message.Chat.Id, Constants.defaultBot);
                         break;
                 }
             }
@@ -90,7 +90,7 @@ namespace RozetkaFinder.Services.TelegramServices
 
         public async void Send(string link, long chatId)
         {
-            await bot.SendTextMessageAsync(chatId, "Visit your subscription  . . . ");
+            await bot.SendTextMessageAsync(chatId,Constants.visitBot);
             await bot.SendTextMessageAsync(chatId, link);
         }
     }

@@ -11,6 +11,7 @@ public class Data
     public string empty_response_message { get; set; }
     public Quantities quantities { get; set; }
     public Pagination pagination { get; set; }
+    [JsonIgnore]
     public Option[] options { get; set; }
     [JsonIgnore]
     public object[] chosen { get; set; }
@@ -102,6 +103,7 @@ public class Option
     public string category_id { get; set; }
     public string comparable { get; set; }
     public string more_word { get; set; }
+    [JsonIgnore]
     public float order { get; set; }
     public bool is_checkbox { get; set; }
     public Option_Values[] option_values { get; set; }
