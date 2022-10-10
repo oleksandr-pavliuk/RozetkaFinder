@@ -16,7 +16,7 @@ namespace RozetkaFinder.Services.UserServices
 {
     public interface IUserService
     {
-        Task<TokenDTO> Create(UserRegisterDTO request);
+        Task<TokenDTO> Registration(UserRegisterDTO request);
         Task<TokenDTO> Update(UserInDTO request);
         void Update(User user);
         Task<TokenDTO> Login(UserInDTO request);
@@ -51,36 +51,33 @@ namespace RozetkaFinder.Services.UserServices
             _validationService = validationService;
         }
 
-        // -------------------------------------------------------------   REGISTRATION
-        public async Task<TokenDTO> Create(UserRegisterDTO request)
+        // Method for user registration and adding to data base.
+        public async Task<TokenDTO> Registration(UserRegisterDTO request)
         {
             _validationService.ModelValidation(request);
 
             User user = _mapper.Map<User>(request);
 
             byte[] passwordHash, passwordSalt;
-            RefreshToken refToken;
-            refToken = _refreshTokenService.GenerateRefreshTokenAsync();
+           
             (passwordHash, passwordSalt) = await _passwordService.CreatePasswordHashAsync(request.Password);
 
             user.IdHash = _configurationId.ConfigIdHashAsync();
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.RefreshToken = refToken.Token;
-            user.TokenExpires = refToken.Expires;
-            user.TokenCreated = refToken.Created;
+            SetUserRefreshToken(ref user);
 
             await _repository.CreateAsync(user);
 
             return(new TokenDTO()
             {
                 JwtToken = _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
-                Refresh = refToken
+                Refresh = user.RefreshToken
             });
 
         }
 
-        // ------------------------------------------------------------  LOGIN
+        // Method for login user in the system.
         public async Task<TokenDTO> Login(UserInDTO request)
         {
             User user = this.FindByEmail(request.Email);
@@ -90,21 +87,18 @@ namespace RozetkaFinder.Services.UserServices
             if (!await _passwordService.AuthenticationPasswordHashAsync(request.Password, user.PasswordHash, user.PasswordSalt))
                 throw new UserNotFoundException(Constants.passwordOrEmailInvalid);
             
-            RefreshToken refToken = _refreshTokenService.GenerateRefreshTokenAsync();
-            user.RefreshToken = refToken.Token;
-            user.TokenCreated = refToken.Created;
-            user.TokenExpires = refToken.Expires;
+            SetUserRefreshToken(ref user);
             await _repository.UpdateAsync(user, u => user.Email == u.Email);
             
             return new TokenDTO()
             {
                 JwtToken = _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
-                Refresh = refToken
+                Refresh = user.RefreshToken
             };
 
         }
 
-        //----------------------------------------------------------- UPDATE REFTOKEN
+        // Method for updating refresh token in the data base.
         public async Task<TokenDTO> Update(UserInDTO request)
         {
             User user = _repository.ReadAsync(u => u.Email == request.Email);
@@ -113,44 +107,51 @@ namespace RozetkaFinder.Services.UserServices
                 throw new UserNotFoundException(Constants.userNotFoundMessage);
             else
             {
-                RefreshToken refreshToken = _refreshTokenService.GenerateRefreshTokenAsync();
-                user.RefreshToken = refreshToken.Token;
-                user.TokenCreated = refreshToken.Created;
-                user.TokenExpires = refreshToken.Expires;
-                await _repository.UpdateAsync(user, u => u.Email == user.Email);
+               SetUserRefreshToken(ref user);
 
                 return (new TokenDTO()
                 {
                     JwtToken = _jwtService.GenerateJwtTokenAsync(user, await _jsonService.GetJwtSaltAsync()),
-                    Refresh = refreshToken
+                    Refresh = user.RefreshToken
                 });
             }
         }
+        
 
+        // Method for setting user's reftoken  
+        private void SetUserRefreshToken(ref User user)
+        {
+            RefreshToken refreshToken = _refreshTokenService.GenerateRefreshTokenAsync();
+            user.RefreshToken = refreshToken.Token;
+            user.TokenCreated = refreshToken.Created;
+            user.TokenExpires = refreshToken.Expires;
+        }
+
+        //Method for updating user in database.
         public async void Update(User user)
         {
             await _repository.UpdateAsync(user, u => u.Email == user.Email);
         }
-        // --------------------------------------------------------- FIND USER
 
+        // Method for user search in data base.
         public User GetUser(string userEmail)
         {
             return _repository.ReadAsync(u => u.Email == userEmail);
         }
-        //----------------------------------------------------------  GET ALL USER (ADMIN)
+        
+        //Method for getting all users from data base (only for admins).
         public async Task<IEnumerable<User>> GetAll()
         {
             return await _repository.GetAllAsync();
         }
 
-
-        //----------------------------------------------------------  FIND EMAIL
+        // Method for user search by user's email.
         private User FindByEmail(string email)
         {
             return _repository.ReadAsync(u => u.Email == email);
         }
 
-        //-------------------------------------------------------- CHANGE PASSWORD
+        // Method for changing user's password.
         public async Task<string> ChangePassword(string email, string oldPassword, string newPassword)
         {
             User user = _repository.ReadAsync(u => u.Email == email);
@@ -168,7 +169,7 @@ namespace RozetkaFinder.Services.UserServices
 
         }
 
-        //--------------------------------------------------------- CHANGE NOTIFICATION
+        //Method for changing user's notification.
         public async Task<string> ChangeNotificationSetting(string email)
         {
             User user = _repository.ReadAsync(u => u.Email == email);

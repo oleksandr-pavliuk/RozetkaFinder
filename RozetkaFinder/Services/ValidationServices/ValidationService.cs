@@ -28,7 +28,8 @@ namespace RozetkaFinder.Services.ValidationServices
             TelegramValidation(request.Telegram);
         }
 
-         // =============== EMAIL VALIDATION ================
+         // Email validation (using for checking naming of the email boxes)
+         // that helps to avoid conflicts.
         private void EmailValidation(string email)
         {
             if(_repository.ReadAsync(u => u.Email == email) != null)
@@ -40,7 +41,9 @@ namespace RozetkaFinder.Services.ValidationServices
                 throw new EmailFormatException(Constants.emailExistingMessage, email);
         }
 
-        //=================== PASSWORD VALIDATION ======================
+
+        // Email validation (using for checking security level of the user's password)
+        // that helps to avoid problems.
         private void PasswordValidation(string password)
         {
             if(password.Length < 8)
@@ -84,7 +87,8 @@ namespace RozetkaFinder.Services.ValidationServices
 
         }
 
-        //========================= TELEGRAM VALIDATION =========================
+        // Telegram validation (using for checking naming of the telegram's username)
+        // that helps to avoid conflicts.
         private void TelegramValidation(string telegram)
         {
             if (!telegram.ToLower().StartsWith('@'))

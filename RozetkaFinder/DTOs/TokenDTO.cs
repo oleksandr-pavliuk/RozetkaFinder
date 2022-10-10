@@ -4,7 +4,7 @@ namespace RozetkaFinder.DTOs
 {
     public class TokenDTO
     {
-        public RefreshToken Refresh { get; set; }
+        public string Refresh { get; set; }
         public string JwtToken { get; set; }
     }
 }

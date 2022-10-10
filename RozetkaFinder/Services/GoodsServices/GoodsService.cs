@@ -31,10 +31,14 @@ namespace RozetkaFinder.Services.GoodsServices
             _repositoryMarkdowns = repositoryMarkdowns;
             _jsonService = jsonService;
         }
+
+        //Method for getting good from RozetkaAPI by naming.
         public async Task<List<GoodDTO>> GetGoodsByRequestAsync(string name)
         {
             return await _jsonService.GetGoodsAsync(name);
         }
+
+        //Method for subscribing good by id (add in data base).
         public async Task<bool> SubscribeGoodAsync(string id, string email)
         {
 
@@ -50,6 +54,8 @@ namespace RozetkaFinder.Services.GoodsServices
                 return false;
             }
         }
+
+        //Method for checking price from data base and RozetkaAPI.
         public async Task<bool> CheckGoodPriceAsync(SubscribtionGood good)
         {
             var goodNew = await _jsonService.GetGoodIDAsync(Convert.ToString(good.IdGood));
@@ -58,10 +64,13 @@ namespace RozetkaFinder.Services.GoodsServices
             return false;
         }
 
+        //Method for deleting good which was used.
         public async void DeleteGoodAsync(SubscribtionGood good)
         {
             await _repositoryGoods.DeleteAsync(good);
         }
+
+        //Method for getting all goods from data base.
         public async Task<IEnumerable<SubscribtionGood>> GetAllGoodsAsync()
         {
             return await _repositoryGoods.GetAllAsync();

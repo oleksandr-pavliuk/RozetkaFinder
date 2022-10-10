@@ -31,7 +31,7 @@ namespace RozetkaFinder.Controllers
 
         [HttpPost("register")]
         public async Task<TokenDTO> RegisterAsync(UserRegisterDTO request) =>
-            await _userService.Create(request);
+            await _userService.Registration(request);
 
         [HttpGet("all")]
         [Authorize(Roles = "admin")]

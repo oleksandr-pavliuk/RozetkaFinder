@@ -13,6 +13,7 @@ namespace RozetkaFinder.Services.Notification
             _telegramService = telegramService;
         }
 
+        //Method for sending telegram message.
         public void Send(string emailTo, string link)
         {
             var telegramTo = _userService.GetUser(emailTo).TelegramChatId;
