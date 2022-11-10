@@ -11,6 +11,7 @@ using RozetkaFinder.Services.PasswordServices;
 using RozetkaFinder.Services.Security.JwtToken;
 using RozetkaFinder.Services.Security.RefreshToken;
 using RozetkaFinder.Services.ValidationServices;
+using RozetkaFinder.Services.MarkdownServices;
 
 namespace RozetkaFinder.Services.UserServices
 {
@@ -24,6 +25,11 @@ namespace RozetkaFinder.Services.UserServices
         Task<string> ChangePassword(string email, string oldPassword, string newPassword);
         Task<string> ChangeNotificationSetting(string email);
         public User GetUser(string userEmail);
+
+        Task<bool> SubscribeGoodAsync(string id, string email);
+        Task<bool> SubscribeMarkdownAsync(string naming, string email);
+
+
     }
     public class UserService : IUserService
     {
@@ -36,11 +42,13 @@ namespace RozetkaFinder.Services.UserServices
         private readonly IMapper _mapper;
         private readonly IValidationService _validationService;
         private readonly IGoodsService _goodsService;
+        private readonly IMarkdownService _markdownService;
         private readonly IJsonService _jsonService;
-        public UserService( IJsonService jsonService, IGoodsService goodsService, IConfiguration config,IMapper mapper, IRepository<User> repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdHelper configurationId, IPasswordService passwordService, IValidationService validationService)
+        public UserService( IJsonService jsonService,IMarkdownService markdownService, IGoodsService goodsService, IConfiguration config,IMapper mapper, IRepository<User> repository, IJwtService jwtConfiguration, IRefreshTokenService refreshTokenConfiguration, IIdHelper configurationId, IPasswordService passwordService, IValidationService validationService)
         {
             _jsonService = jsonService;
             _goodsService = goodsService;
+            _markdownService = markdownService;
             _mapper = mapper;
             _configuration = config;
             _repository = repository;
@@ -176,6 +184,18 @@ namespace RozetkaFinder.Services.UserServices
             user.Notification = user.Notification == global::Notification.email ? global::Notification.telegram : global::Notification.email;
             await _repository.UpdateAsync(user, u => u.Email == user.Email);
             return Constants.notificationChanged;
+        }
+
+        //Subscrioption on the good
+        public async Task<bool> SubscribeGoodAsync(string id, string email)
+        {
+            return await _goodsService.SubscribeGoodAsync(id, email);
+        }
+
+        //Subscription on the markdown
+        public async Task<bool> SubscribeMarkdownAsync(string naming, string email)
+        {
+            return await _markdownService.SubscribeMarkdownAsync(naming, email);
         }
     }
 }

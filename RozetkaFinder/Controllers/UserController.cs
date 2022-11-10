@@ -40,7 +40,7 @@ namespace RozetkaFinder.Controllers
             return await _userService.GetAll();
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<TokenDTO> LoginAsync(UserInDTO request)
         {
             return await _userService.Login(request);
@@ -53,45 +53,32 @@ namespace RozetkaFinder.Controllers
             return "t.me/roz_not_bot";
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<List<GoodDTO>> GetGoods(string name)
-        {
-            return await _goodService.GetGoodsByRequestAsync(name);
-        }
-
 
         [HttpPost]
         [Authorize]
-        public async Task<bool> SubscribeGood(string id)
+        public async Task<bool> SubscribeGoodAsync(string id)
         {
             var user = HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value;
-            return await _goodService.SubscribeGoodAsync(id, user);
+            return await _userService.SubscribeGoodAsync(id, user);
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<List<GoodDTO>> GetAllMarkdowns(string naming)
-        {
-            return await _markdownService.GetMarkdownsAsync(naming);
-        }
-
+        
         [HttpPost]
         [Authorize]
-        public async Task<bool> SubscribeMarkdown(string naming)
+        public async Task<bool> SubscribeMarkdownAsync(string naming)
         {
-            return await _markdownService.SubscribeMarkdownAsync(naming, HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value);
+            return await _userService.SubscribeMarkdownAsync(naming, HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize]
-        public async Task<string> ChangePassword(string oldPasswod, string newPassword)
+        public async Task<string> ChangePasswordAsync(string oldPasswod, string newPassword)
         {
             return await _userService.ChangePassword(HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value, oldPasswod, newPassword);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize]
-        public async Task<string> ChangeNotificationSetting()
+        public async Task<string> ChangeNotificationSettingAsync()
         {
             return await _userService.ChangeNotificationSetting(HttpContext.User.Claims.Where(i => i.Value.Contains('@')).FirstOrDefault(i => i.Value.Contains('@')).Value);
         }

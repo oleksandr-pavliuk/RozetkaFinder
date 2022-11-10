@@ -1,7 +1,4 @@
-using AutoMapper.Execution;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RozetkaFinder.Helpers;
@@ -22,13 +19,12 @@ using RozetkaFinder.Services.TelegramServices;
 using RozetkaFinder.Services.UserServices;
 using RozetkaFinder.Services.ValidationServices;
 using Swashbuckle.AspNetCore.Filters;
-using System.Net;
 using System.Text;
-using Telegram.Bots;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var not = Activator.CreateInstance(typeof(INotificationService).Namespace, "EmailNotificationService");
+
 
 // Add services to the container.
 
