@@ -1,4 +1,7 @@
-# RozetkaFinder
-## ASP.NET Core WebAPI
-## EntityFramework
-##
+## RozetkaFinder
+  C#
+  ASP.NET Core WebAPI
+  EntityFramework, LINQ, MS SQL
+  Swagger, Mapper
+  
+  
